@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Professional Tangram Memory Game – LiveHTML</title>
+<meta name="description" content="Professional Tangram Memory Game – Interactive, responsive and fully built with JavaScript. Developed by LiveHTML.">
+<meta name="keywords" content="memory game, tangram, javascript game, interactive grid, html game, mini game, online game, browser game, LiveHTML">
+<meta name="author" content="Okan Kaplan | LiveHTML">
+
+<style>
+    /* === GENERAL STYLES === */
+    body {
+        font-family: 'Segoe UI', Arial, sans-serif;
+        background: #f0f4f8;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+    }
+
+    /* === HEADER === */
+    header {
+        width: 100%;
+        background: linear-gradient(90deg, #000, #111);
+        padding: 12px 20px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1000;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        color: #ffcc00;
+    }
+    .header-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+    .logo {
+        font-size: 22px;
+        font-weight: 700;
+        color: #ffcc00;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+    .logo:hover {
+        color: #fff;
+        text-shadow: 0 0 10px #ffcc00;
+    }
+    nav a {
+        color: #ffcc00;
+        text-decoration: none;
+        font-weight: 600;
+        margin-left: 15px;
+        transition: 0.3s;
+    }
+    nav a:hover {
+        color: #fff;
+        transform: scale(1.05);
+        text-shadow: 0 0 6px #ffcc00;
+    }
+
+    /* === MAIN TITLE & INFO === */
+    main {
+        margin-top: 100px;
+        text-align: center;
+        width: 100%;
+        max-width: 900px;
+        padding: 0 20px;
+    }
+    h1 {
+        margin-top: 20px;
+        color: #333;
+    }
+    .info {
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+        margin: 15px 0;
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    /* === GAME GRID === */
+    .game-container {
+        display: grid;
+        gap: 15px;
+        justify-content: center;
+        margin-bottom: 20px;
+    }
+    .card {
+        width: 90px;
+        height: 90px;
+        position: relative;
+        cursor: pointer;
+        transform-style: preserve-3d;
+        transition: transform 0.6s;
+        border-radius: 8px;
+    }
+    .card.flip {
+        transform: rotateY(180deg);
+    }
+    .card .front, .card .back {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        border-radius: 8px;
+        backface-visibility: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .card .front {
+        background: #fff;
+        border: 2px solid #ccc;
+    }
+    .card .back {
+        background: #2196F3;
+        transform: rotateY(180deg);
+    }
+    svg {
+        width: 60px;
+        height: 60px;
+    }
+
+    /* === FOOTER === */
+    footer {
+        width: 100%;
+        background: #111;
+        color: #aaa;
+        text-align: center;
+        padding: 15px 10px;
+        margin-top: auto;
+    }
+    footer a {
+        color: #ffcc00;
+        text-decoration: none;
+        margin: 0 8px;
+    }
+    footer a:hover {
+        color: #fff;
+    }
+    footer p {
+        margin: 6px 0 0 0;
+        font-size: 13px;
+    }
+
+    /* === RESPONSIVE === */
+    @media (max-width: 600px) {
+        .game-container {
+            gap: 10px;
+        }
+        .card {
+            width: 70px;
+            height: 70px;
+        }
+        svg {
+            width: 45px;
+            height: 45px;
+        }
+        nav {
+            display: none;
+        }
+        header {
+            text-align: center;
+        }
+    }
+</style>
+</head>
+<body>
+
+<!-- === HEADER === -->
+<header>
+    <div class="header-container">
+        <a href="https://www.livehtml.net" target="_blank" rel="noopener" class="logo">🟡 LiveHTML</a>
+        <nav>
+            <a href="https://www.youtube.com/@livehtmlcode" target="_blank">🎬 YouTube</a>
+            <a href="https://codepen.io/livehtml" target="_blank">💻 CodePen</a>
+            <a href="https://sketchfab.com/canvasor" target="_blank">🎨 Sketchfab</a>
+            <a href="https://www.linkedin.com/in/canvasor/" target="_blank">🔗 LinkedIn</a>
+        </nav>
+    </div>
+</header>
+
+<main>
+    <h1>🧩 Memory Game</h1>
+    <div class="info">
+        <div>Level: <span id="level">1</span></div>
+        <div>Score: <span id="score">0</span></div>
+        <div>Time: <span id="timer">60</span>s</div>
+    </div>
+    <div class="game-container" id="game-container"></div>
+</main>
+
+<!-- === FOOTER === -->
+<footer>
+    <p>© 2025 <strong>LiveHTML</strong></p>
+    <div>
+        <a href="https://www.youtube.com/@livehtmlcode" target="_blank">🎬 YouTube</a>
+        <a href="https://codepen.io/livehtml" target="_blank">💻 CodePen</a>
+        <a href="https://sketchfab.com/canvasor" target="_blank">🎨 Sketchfab</a>
+        <a href="https://www.linkedin.com/in/canvasor/" target="_blank">🔗 LinkedIn</a>
+    </div>
+    <p>🪶 This project is licensed under the <strong>MIT License</strong>.</p>
+</footer>
+
+<script>
+// === TANGRAM SHAPES ===
+const tangrams = [
+`<svg viewBox="0 0 100 100"><polygon points="0,0 50,50 0,100" fill="#f44336"/></svg>`,
+`<svg viewBox="0 0 100 100"><polygon points="0,0 100,0 50,50" fill="#4caf50"/></svg>`,
+`<svg viewBox="0 0 100 100"><polygon points="100,0 100,100 50,50" fill="#ff9800"/></svg>`,
+`<svg viewBox="0 0 100 100"><polygon points="0,100 50,50 100,100" fill="#2196f3"/></svg>`,
+`<svg viewBox="0 0 100 100"><polygon points="25,50 50,25 75,50 50,75" fill="#9c27b0"/></svg>`,
+`<svg viewBox="0 0 100 100"><polygon points="25,25 50,0 75,25 50,50" fill="#00bcd4"/></svg>`,
+`<svg viewBox="0 0 100 100"><polygon points="25,75 50,50 75,75 50,100" fill="#ffeb3b"/></svg>`
+];
+
+let level = 1, score = 0, timer = 60, firstCard = null, secondCard = null, lockBoard = false, matches = 0, gameTimer;
+
+function shuffle(array){return array.sort(()=>Math.random()-0.5);}
+function createBoard(){
+    const container=document.getElementById("game-container");
+    container.innerHTML="";
+    const levelShapes=tangrams.slice(0,Math.min(level+2,tangrams.length));
+    const cardsArray=shuffle([...levelShapes,...levelShapes]);
+    matches=0;
+    const columns=Math.min(4,cardsArray.length/2);
+    container.style.gridTemplateColumns=`repeat(${columns},1fr)`;
+    cardsArray.forEach(shape=>{
+        const card=document.createElement("div");
+        card.classList.add("card");
+        card.innerHTML=`<div class="front"></div><div class="back">${shape}</div>`;
+        card.addEventListener("click",flipCard);
+        container.appendChild(card);
+    });
+}
+function flipCard(){
+    if(lockBoard||this===firstCard)return;
+    this.classList.add("flip");
+    if(!firstCard){firstCard=this;return;}
+    secondCard=this;checkMatch();
+}
+function checkMatch(){
+    const isMatch=firstCard.querySelector(".back").innerHTML===secondCard.querySelector(".back").innerHTML;
+    if(isMatch){score+=10;matches++;updateInfo();disableCards();if(matches===Math.min(level+2,tangrams.length))nextLevel();}
+    else{score=Math.max(0,score-2);updateInfo();unflipCards();}
+}
+function disableCards(){firstCard.removeEventListener("click",flipCard);secondCard.removeEventListener("click",flipCard);resetBoard();}
+function unflipCards(){lockBoard=true;setTimeout(()=>{firstCard.classList.remove("flip");secondCard.classList.remove("flip");resetBoard();},1000);}
+function resetBoard(){[firstCard,secondCard,lockBoard]=[null,null,false];}
+function updateInfo(){document.getElementById("score").textContent=score;document.getElementById("level").textContent=level;}
+function startTimer(){timer=60;document.getElementById("timer").textContent=timer;clearInterval(gameTimer);gameTimer=setInterval(()=>{timer--;document.getElementById("timer").textContent=timer;if(timer<=0){clearInterval(gameTimer);alert(`Time's up! Your final score: ${score}`);level=1;score=0;updateInfo();createBoard();startTimer();}},1000);}
+function nextLevel(){alert(`Level ${level} completed! Moving to next level.`);level++;createBoard();}
+createBoard();updateInfo();startTimer();
+</script>
+
+</body>
+</html>
